@@ -1,0 +1,37 @@
+/* Caminho: CMedMexx/frontend/src/components/Hospital/HospitalStaffView.css */
+.hospital-staff-view {
+    padding: 20px;
+}
+
+.fc {
+    max-width: 90%;
+    margin: auto;
+}
+
+.calendar-event {
+    padding: 5px;
+    background-color: rgba(0, 123, 255, 0.15);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.operations-extract {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
+    margin-top: 20px;
+}
+
+.event-card {
+    width: 250px;
+    background-color: #90E3EE;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.event-card p {
+    margin: 5px 0;
+    font-size: 14px;
+}

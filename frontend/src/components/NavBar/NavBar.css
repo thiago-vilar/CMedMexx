@@ -1,0 +1,66 @@
+/* C:\Projetos\000cmed-mexx\1frontendweb\src\components\NavBar\NavBar.css */
+
+.navbar {
+    background-color: #4caf50;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Alinha os itens aos extremos */
+    padding: 10px;
+}
+
+.navbar-brand {
+    color: white !important;  /* Mantém a cor branca para contrastar com o fundo */
+    text-decoration: none;  /* Remove o sublinhado dos links */
+    font-size: 1.4em;  /* Aumenta o tamanho da fonte */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Muda a fonte */
+    padding: 0 20px;  /* Adiciona padding horizontal */
+    transition: font-size 0.3s ease;  /* Suaviza a transição do tamanho da fonte */
+    margin-left: 10px;  /* Adiciona margem à esquerda */
+}
+
+.navbar-brand:hover {
+    font-size: 1.401em;  /* Aumenta ligeiramente o tamanho da fonte ao passar o mouse */
+}
+
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-nav a,
+.navbar-nav button {
+    color: white;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.navbar-nav a:hover,
+.navbar-nav button:hover {
+    text-decoration: underline;
+}
+
+.link-spacing {
+    margin-right: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.navbar-links button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.navbar-links button:hover {
+    background-color: #d32f2f;
+}

@@ -1,0 +1,36 @@
+/* C:\Projetos\CMedMexx\frontend\src\pages\SignUp\SignUp.css */
+.register-button {
+    background-color: #4caf50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+    width: 100%;
+  }
+  
+  .register-button:hover {
+    background-color: #45a049;
+  }
+  
+  .signup-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-width: 500px;
+    padding: 20px;
+  }
+  
+  .signup-container input,
+  .signup-container select,
+  .signup-container button {
+    box-sizing: border-box; /* Garante que padding não afete a largura total */
+    display: block;
+    margin-bottom: 10px; /* Adiciona um espaçamento entre os elementos */
+    padding: 10px;
+    width: 100%;
+  }
+  

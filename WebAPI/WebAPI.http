@@ -1,0 +1,30 @@
+@WebAPI_HostAddress = http://localhost:5000
+
+### Teste o endpoint WeatherForecast
+GET {{WebAPI_HostAddress}}/weatherforecast
+Accept: application/json
+
+###
+
+### Teste o endpoint de registro (signup)
+POST {{WebAPI_HostAddress}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "TestPassword123"
+}
+
+###
+
+### Teste o endpoint de login (signin)
+POST {{WebAPI_HostAddress}}/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "TestPassword123"
+}
+
+###
