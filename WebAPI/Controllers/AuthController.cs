@@ -1,5 +1,4 @@
 ﻿//C:\Projetos\CMedMexx\WebAPI\Controllers\AuthController.cs
-
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -19,7 +18,6 @@ namespace WebAPI.Controllers
             _authService = authService;
         }
 
-        // Endpoint para cadastro de usuários
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(UserRegistrationDto userDto)
         {
@@ -33,9 +31,8 @@ namespace WebAPI.Controllers
                 var user = await _authService.SignUp(userDto);
                 if (user == null)
                 {
-                    throw new Exception("Registration failed.");
+                    return BadRequest(new { IsSuccess = false, Message = "Registration failed." });
                 }
-                // Registro bem-sucedido, retorna uma mensagem e indiretamente sugere redirecionamento para SignIn
                 return Ok(new { IsSuccess = true, Message = "User registered successfully. Please log in." });
             }
             catch (Exception ex)
@@ -44,18 +41,27 @@ namespace WebAPI.Controllers
             }
         }
 
-        // Endpoint para login de usuários
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn(UserLoginDto loginDto)
         {
             try
             {
-                var (Token, Role, Username) = await _authService.SignIn(loginDto.Email, loginDto.Password);
-                if (Token == null)
+                 var result = await _authService.SignIn(loginDto.Email, loginDto.Password);
+                // Verifique se a tupla 'result' não é nula antes de acessar seus elementos
+                if (result.Token == null)
                 {
-                    throw new Exception("Login failed.");
+                    return Unauthorized(new { IsSuccess = false, Message = "Login failed." });
                 }
-                return Ok(new { IsSuccess = true, Message = "Login successful", Token, Role, Username });
+                HttpContext.Response.Headers.Append("Authorization", $"Bearer {result.Token}");
+                return Ok(new {
+                    IsSuccess = true,
+                    Message = "Login successful",
+                    Token = result.Token,
+                    Role = result.Role,
+                    Username = result.Username,
+                    Email = result.Email,
+                    UserId = result.UserId
+                });
             }
             catch (Exception ex)
             {

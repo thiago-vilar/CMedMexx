@@ -16,7 +16,7 @@ namespace WebAPI.Services
 {
     public interface IAuthService
     {
-        Task<(string Token, string Role, string Username)> SignIn(string email, string password);
+        Task<(string Token, string Role, string Username, string Email, int UserId)> SignIn(string email, string password);
         Task<User> SignUp(UserRegistrationDto registration);
     }
 
@@ -33,20 +33,29 @@ namespace WebAPI.Services
             _configuration = configuration;
         }
 
-        public async Task<(string Token, string Role, string Username)> SignIn(string email, string password)
+        public async Task<(string Token, string Role, string Username, string Email, int UserId)> SignIn(string email, string password)
         {
             var user = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, password) != PasswordVerificationResult.Success)
+            if (user == null)
             {
                 throw new InvalidOperationException("Invalid credentials.");
             }
 
+            if (_passwordHasher.VerifyHashedPassword(user, user.Password, password) != PasswordVerificationResult.Success)
+            {
+                throw new InvalidOperationException("Invalid password.");
+            }
+
+            return (GenerateJwtToken(user), user.Role, user.Username, user.Email, user.UserId);
+        }
+
+        private string GenerateJwtToken(User user)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var keyString = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured properly.");
-            var key = Encoding.ASCII.GetBytes(keyString);
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured properly."));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -54,15 +63,15 @@ namespace WebAPI.Services
                 {
                     new Claim(ClaimTypes.Name, user.Username),
                     new Claim(ClaimTypes.Role, user.Role),
-                    // Aqui é feita a correção, trocando para um tipo de claim padrão que vai armazenar o UserId
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email)
                 }),
                 Expires = DateTime.UtcNow.AddDays(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return (tokenHandler.WriteToken(token), user.Role, user.Username);
+            return tokenHandler.WriteToken(token);
         }
 
 

@@ -14,13 +14,13 @@ namespace WebAPI
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Admin> Admin { get; set; }
         public DbSet<Room> Rooms { get; set; }
-        public DbSet<RoomRental> RoomRentals { get; set; } // Adicionado DbSet para RoomRentals
+        public DbSet<RoomRental> RoomRentals { get; set; }
+        public DbSet<RentedRoom> RentedRooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurações de relacionamento para Appointment
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Doctor)
                 .WithMany(d => d.Appointments)
@@ -35,21 +35,23 @@ namespace WebAPI
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<RoomRental>()
-                .HasOne(r => r.Room)
-                .WithMany()
-                .HasForeignKey(r => r.RoomId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);  // Configure conforme a necessidade do negócio
+            modelBuilder.Entity<RentedRoom>()
+                .ToTable("RentedRooms")
+                .HasKey(rr => new { rr.UserId, rr.RoomId });
 
-            modelBuilder.Entity<RoomRental>()
-                .HasOne(r => r.User)
+            modelBuilder.Entity<RentedRoom>()
+                .HasOne<User>()
                 .WithMany()
-                .HasForeignKey(r => r.UserId)
+                .HasForeignKey(rr => rr.UserId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);  // Configure conforme a necessidade do negócio
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RentedRoom>()
+                .HasOne<Room>()
+                .WithMany()
+                .HasForeignKey(rr => rr.RoomId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
-            // Adicione outras configurações de relacionamento e índices conforme necessário
-        
     }
 }

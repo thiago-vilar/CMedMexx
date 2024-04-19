@@ -1,0 +1,21 @@
+.doctor-view {
+    margin-top: 20px;
+}
+
+.card {
+    width: 300px; /* Approximate width of a credit card */
+    height: 190px; /* Approximate height of a credit card */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.doctor-view .card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.doctor-view .card:hover {
+    transform: scale(1.05);
+}

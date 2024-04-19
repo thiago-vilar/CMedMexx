@@ -1,0 +1,272 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+namespace WebAPI.Migrations
+{
+    /// <inheritdoc />
+    public partial class CreateRentedRoomTable : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_RoomRentals_Doctors_DoctorId",
+                table: "RoomRentals");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Rooms_Users_HospitalStaffId",
+                table: "Rooms");
+
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_RoomRentals",
+                table: "RoomRentals");
+
+            migrationBuilder.RenameColumn(
+                name: "HospitalStaffId",
+                table: "Rooms",
+                newName: "UserId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Rooms_HospitalStaffId",
+                table: "Rooms",
+                newName: "IX_Rooms_UserId");
+
+            migrationBuilder.RenameColumn(
+                name: "StartDateTime",
+                table: "RoomRentals",
+                newName: "Start");
+
+            migrationBuilder.RenameColumn(
+                name: "EndDateTime",
+                table: "RoomRentals",
+                newName: "End");
+
+            migrationBuilder.RenameColumn(
+                name: "Id",
+                table: "RoomRentals",
+                newName: "UserId");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "DoctorId",
+                table: "RoomRentals",
+                type: "integer",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "UserId",
+                table: "RoomRentals",
+                type: "integer",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer")
+                .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            migrationBuilder.AddColumn<int>(
+                name: "RoomRentalId",
+                table: "RoomRentals",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0)
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsConfirmed",
+                table: "RoomRentals",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_RoomRentals",
+                table: "RoomRentals",
+                column: "RoomRentalId");
+
+            migrationBuilder.CreateTable(
+                name: "RentedRooms",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    RoomId = table.Column<int>(type: "integer", nullable: false),
+                    RentedRoomId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId1 = table.Column<int>(type: "integer", nullable: false),
+                    RoomId1 = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RentedRooms", x => new { x.UserId, x.RoomId });
+                    table.ForeignKey(
+                        name: "FK_RentedRooms_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RentedRooms_Rooms_RoomId1",
+                        column: x => x.RoomId1,
+                        principalTable: "Rooms",
+                        principalColumn: "RoomId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RentedRooms_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RentedRooms_Users_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomRentals_UserId",
+                table: "RoomRentals",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentedRooms_RoomId",
+                table: "RentedRooms",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentedRooms_RoomId1",
+                table: "RentedRooms",
+                column: "RoomId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentedRooms_UserId1",
+                table: "RentedRooms",
+                column: "UserId1");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_RoomRentals_Doctors_DoctorId",
+                table: "RoomRentals",
+                column: "DoctorId",
+                principalTable: "Doctors",
+                principalColumn: "DoctorId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_RoomRentals_Users_UserId",
+                table: "RoomRentals",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "UserId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Rooms_Rooms_UserId",
+                table: "Rooms",
+                column: "UserId",
+                principalTable: "Rooms",
+                principalColumn: "RoomId",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_RoomRentals_Doctors_DoctorId",
+                table: "RoomRentals");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_RoomRentals_Users_UserId",
+                table: "RoomRentals");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Rooms_Rooms_UserId",
+                table: "Rooms");
+
+            migrationBuilder.DropTable(
+                name: "RentedRooms");
+
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_RoomRentals",
+                table: "RoomRentals");
+
+            migrationBuilder.DropIndex(
+                name: "IX_RoomRentals_UserId",
+                table: "RoomRentals");
+
+            migrationBuilder.DropColumn(
+                name: "RoomRentalId",
+                table: "RoomRentals");
+
+            migrationBuilder.DropColumn(
+                name: "IsConfirmed",
+                table: "RoomRentals");
+
+            migrationBuilder.RenameColumn(
+                name: "UserId",
+                table: "Rooms",
+                newName: "HospitalStaffId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Rooms_UserId",
+                table: "Rooms",
+                newName: "IX_Rooms_HospitalStaffId");
+
+            migrationBuilder.RenameColumn(
+                name: "UserId",
+                table: "RoomRentals",
+                newName: "Id");
+
+            migrationBuilder.RenameColumn(
+                name: "Start",
+                table: "RoomRentals",
+                newName: "StartDateTime");
+
+            migrationBuilder.RenameColumn(
+                name: "End",
+                table: "RoomRentals",
+                newName: "EndDateTime");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "DoctorId",
+                table: "RoomRentals",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "RoomRentals",
+                type: "integer",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer")
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_RoomRentals",
+                table: "RoomRentals",
+                column: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_RoomRentals_Doctors_DoctorId",
+                table: "RoomRentals",
+                column: "DoctorId",
+                principalTable: "Doctors",
+                principalColumn: "DoctorId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Rooms_Users_HospitalStaffId",
+                table: "Rooms",
+                column: "HospitalStaffId",
+                principalTable: "Users",
+                principalColumn: "UserId",
+                onDelete: ReferentialAction.Cascade);
+        }
+    }
+}

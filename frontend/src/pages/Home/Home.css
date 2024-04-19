@@ -1,23 +1,31 @@
 /* C:\Projetos\000cmed-mexx\1frontendweb\src\pages\Home\Home.css */
 .calendar {
-    background-color: #e6f4ea;
-    border: 1px solid #ddd;
-    height: 75%;
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px 0;
+    width: 70%;
     margin: auto;
-    padding: 20px;
-    width: 90%;
   }
   
   
   .card {
+    
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
     padding: 20px;
     transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
-    width: 30%;
+   
   }
-  
+  .card h2{
+    color: #000080
+  }
+  .card p{
+    color: #000080
+  }
   .card:hover {
     background-color: #93E9BE;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
@@ -44,12 +52,14 @@
     transform: scale(1.05); /* Faz o card crescer */
     box-shadow: 0 0 10px #93E9BE; /* Adiciona um brilho */
     background-color: #93E9BE; /* Muda a cor de fundo para verde claro */
+    
   }
   
   .journey-cards {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
+    
   }
   
   .main-calendar {
@@ -59,6 +69,10 @@
     margin: 20px 0;
     width: 90%;
     margin: auto;
+  }
+  .main-calendar h2
+  {
+    color: #000080;
   }
   
   .marketing-messages {
@@ -89,6 +103,7 @@
   }
   
   .react-calendar__tile {
+    color: #000080;
     align-items: center;
     display: flex;
     justify-content: center; /* Adicionado para centralizar o conteúdo */
@@ -100,7 +115,8 @@
   }
   
   .react-calendar__navigation__label__labelText {
-    font-size: 2em; /* Aumenta o tamanho da fonte */
+    color: #000080;
+    font-size: 1em; /* Aumenta o tamanho da fonte */
     font-weight: bold; /* Torna a fonte em negrito */
     text-transform: capitalize; /* Torna a primeira letra maiúscula */
   }
@@ -131,9 +147,14 @@
     margin: 20px auto;
     padding: 20px;
     transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
-    width: 60%;
+    width: 50%;
   }
-  
+  .report-card h3 {
+    color: #000080;
+  }
+  .report-card p {
+    color: #000080;
+  }
   .report-card:hover {
     background-color: #93E9BE;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);

@@ -1,57 +1,81 @@
-// C:\Projetos\CMedMexx\frontend\src\pages\DoctorView\DoctorView.jsx
-
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import axios from 'axios';
+import { Card, Button, Alert, Container, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './DoctorView.css';
 
 const DoctorView = () => {
-    const [appointments, setAppointments] = useState([]);
+    const [rooms, setRooms] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        // Suponha que temos uma endpoint API que retorna as consultas agendadas para o médico
-        axios.get('http://localhost:5000/api/appointments/doctor')
-            .then(response => {
-                const formattedAppointments = response.data.map(appointment => ({
-                    title: appointment.patientName + " - " + appointment.reason,
-                    start: appointment.startTime,
-                    end: appointment.endTime
-                }));
-                setAppointments(formattedAppointments);
-            })
-            .catch(error => {
-                console.error('Error fetching appointments:', error);
-            });
+        fetchRooms();
     }, []);
 
-    // Função para manipular a seleção de horário (pode ser usada para ajustar consultas)
-    const handleEventClick = (clickInfo) => {
-        if (window.confirm(`Are you sure you want to delete the appointment with ${clickInfo.event.title}?`)) {
-            clickInfo.event.remove();
+    const fetchRooms = () => {
+        axios.get('http://localhost:5000/api/room/available')
+            .then(response => {
+                setRooms(response.data);
+                console.log('Rooms:', response.data);
+            })
+            .catch(error => {
+                console.error('Failed to fetch rooms:', error);
+                setError('Failed to load rooms.');
+            });
+    };
 
-            // Aqui você pode adicionar lógica para deletar a consulta do backend
-            axios.delete(`http://localhost:5000/api/appointments/delete/${clickInfo.event.id}`)
-                .then(response => {
-                    console.log('Appointment deleted successfully');
-                })
-                .catch(error => {
-                    console.error('Error deleting appointment:', error);
-                });
-        }
+    const bookRoom = (roomId) => {
+        axios.patch(`http://localhost:5000/api/room/book/${roomId}`,{
+            StartDateTime: new Date(),
+            EndDateTime: new Date(),
+            DoctorId:localStorage.getItem('userId')
+        })
+            .then(response => {
+                fetchRooms(); // Refresh the room list after booking
+            })
+            .catch(error => {
+                console.error('Error booking room:', error);
+                setError('Failed to book room.');
+            });
     };
 
     return (
-        <div className="doctor-view">
-            <h2>Doctor's Appointments</h2>
+        <Container className="doctor-view">
+            <h2>Available Rooms</h2>
+            {error && <Alert variant="danger">{error}</Alert>}
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridWeek"
-                events={appointments}
-                eventClick={handleEventClick}
+                initialView="dayGridMonth"
+                events={rooms.map(room => ({
+                    title: room.RoomName,
+                    start: room.Start,
+                    end: room.End,
+                    color: room.IsBooked ? '#007bff' : '#28a745' // Blue for booked, green for available
+                }))}
             />
-        </div>
+            <Row className="mt-3">
+                {rooms.map(room => (
+                    <Col md={4} key={room.roomId}>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>{room.roomName}</Card.Title>
+                                <Card.Text>
+                                    Hospital: {room.hospitalName}
+                                    <br />
+                                    Status: {room.isBooked ? "Booked" : "Available"}
+                                </Card.Text>
+                                <Button variant="primary" onClick={() => bookRoom(room.roomId)} disabled={room.isBooked}>
+                                    Book Room
+                                </Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+        </Container>
     );
 };
 

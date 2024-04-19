@@ -22,15 +22,24 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const { data } = await axios.post('http://localhost:5000/api/auth/signin', credentials);
-            localStorage.setItem('user', JSON.stringify(data));
-            setUser(data);
+            if (data.token && data.role && data.username && data.email && data.userId) {
+                localStorage.setItem('user', JSON.stringify({
+                    token: data.token,
+                    role: data.role,
+                    username: data.username,
+                    email: data.email,
+                    userId: data.userId
+                }));
+                setUser(data);
+            } else {
+                throw new Error('Incomplete data received from server');
+            }
         } catch (error) {
             console.error('Login failed:', error);
-            // Depending on your application's needs, you might want to handle errors differently
             throw error; // This allows the login component to handle the error with a catch block
         }
     };
-
+    
     // Function to perform logout
     const logout = () => {
         localStorage.removeItem('user');

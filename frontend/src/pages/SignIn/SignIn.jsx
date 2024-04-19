@@ -14,13 +14,17 @@ function SignIn() {
 
         try {
             const response = await axios.post('http://localhost:5000/api/auth/signin', { Email, Password });
-            if (response.data.token) {
-                const { token, role, username } = response.data;
+            if (response.data.isSuccess) {
+                const { token, role, username, email, userId } = response.data;
 
+                // Armazenar no localStorage os novos dados incluídos na resposta
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', role);
                 localStorage.setItem('username', username);
+                localStorage.setItem('email', email); // Novo
+                localStorage.setItem('userId', userId.toString()); // Novo
 
+                // Navegação baseada no papel do usuário
                 switch (role) {
                     case 'hospitalstaff':
                         navigate('/HospitalStaffView');
@@ -37,11 +41,11 @@ function SignIn() {
                         break;
                 }
             } else {
-                throw new Error('Invalid credentials');
+                alert('Credenciais inválidas, tente novamente.');
             }
         } catch (error) {
             console.error('Login failed:', error);
-            alert(`Login falhou: ${error.response?.data.message || 'Invalid credentials'}`);
+            alert(`Login falhou: ${error.response?.data.message || 'Credenciais inválidas'}`);
         }
     };
 

@@ -35,7 +35,7 @@ const NavBar = () => {
             <div className="navbar-nav">
                 {username ? (
                     <>
-                        <span>Bem-vindo, {getSalutation(role)} {username}!</span>
+                        <span>Bem-vindo, {getSalutation(role)} {username}!&nbsp;&nbsp;</span>
                         <div className="navbar-links">
     {role === 'hospitalstaff' && <Link to="/HospitalStaffView">Painel Administrativo</Link>}
     {role === 'doctor' && <Link to="/DoctorView">Painel do Médico</Link>}
