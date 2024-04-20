@@ -5,6 +5,8 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
+import { Card, Button, Alert, Container, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './PatientView.css';
 
 const PatientView = () => {
@@ -12,18 +14,29 @@ const PatientView = () => {
 
     useEffect(() => {
         // Suponha que temos uma endpoint API que retorna as consultas disponíveis para agendamento
-        axios.get('http://localhost:5000/api/appointments/available')
-            .then(response => {
-                const formattedAppointments = response.data.map(appointment => ({
-                    id: appointment.id,
-                    title: appointment.doctorName + " - " + appointment.specialization,
-                    start: appointment.startTime,
-                    end: appointment.endTime,
-                    extendedProps: {
-                        doctorId: appointment.doctorId
-                    }
-                }));
+        axios.get('http://localhost:5000/api/RoomRental')
+            .then(async response => { 
+                console.log (response.data);
+                let formattedAppointments = [];
+              
+
+                await response.data.map(async d => {
+                    
+                    const userresponse = await axios.get(`http://localhost:5000/api/user/${d.userId}`)
+                    const response = await axios.get(`http://localhost:5000/api/room/${d.roomId}`)
+                    console.log(response.data, userresponse.data);
+                    formattedAppointments.push({
+                        ...response.data ,
+                        id: response.data.roomId,
+                        title: response.data.hospitalName + ' - ' + userresponse.data.username, 
+                        start: response.data.start,
+                        end: response.data.end,
+                        
+                    });
+                console.log(formattedAppointments);
                 setAvailableAppointments(formattedAppointments);
+                })
+                
             })
             .catch(error => {
                 console.error('Error fetching available appointments:', error);
@@ -57,6 +70,25 @@ const PatientView = () => {
                 events={availableAppointments}
                 eventClick={handleEventClick}
             />
+            <Row className="mt-3">
+                {availableAppointments.map(room => (
+                    <Col md={4} key={room.roomId}>
+                        <Card style = {{backgroundColor: room.isBooked? "blue":"white" }}>
+                            <Card.Body>
+                                <Card.Title>{room.roomName}</Card.Title>
+                                <Card.Text>
+                                    Hospital: {room.hospitalName}
+                                    <br />
+                                    Status: {room.isBooked ? "Booked" : "Available"}
+                                </Card.Text>
+                                <Button onClick={() => handleEventClick(room.roomId)} disabled={room.isBooked}>
+                                    Book Room
+                                </Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
         </div>
     );
 };
