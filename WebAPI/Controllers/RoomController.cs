@@ -22,7 +22,32 @@ namespace WebAPI.Controllers
             _logger = logger;
         }
 
-        // GET: api/room/{userId}
+        // GET: api/room/{roomId}
+        [HttpGet("{roomId}")]
+        public IActionResult GetRoomById(int roomId)
+        {
+            var room = _context.Rooms
+                            .Where(r => r.RoomId == roomId)
+                            .Select(room => new
+                            {
+                                room.RoomId,
+                                room.HospitalName,
+                                room.RoomName,
+                                room.IsBooked,
+                                Start = room.Start.ToString("yyyy-MM-ddTHH:mm:ssZ"), // Formatação ISO 8601
+                                End = room.End.ToString("yyyy-MM-ddTHH:mm:ssZ"),     // Formatação ISO 8601
+                                room.UserId
+                            }).FirstOrDefault();
+
+            if (room == null)
+            {
+                return NotFound($"Room with ID {roomId} not found.");
+            }
+
+            return Ok(room);
+        }
+
+// GET: api/room/{userId}
         [HttpGet("hospitalstaff/{userId}")]
         public IActionResult GetRooms(int userId)
         {
@@ -60,6 +85,30 @@ namespace WebAPI.Controllers
                                     }).ToList();
             return Ok(rooms);
         }
+
+        // GET: api/room/booked
+        [HttpGet("booked")]
+        public IActionResult GetBookedRooms()
+        {
+            // Cria uma data 'today' em UTC
+            var today = DateTime.UtcNow.Date;
+
+            var rooms = _context.Rooms
+                                .Where(room => room.IsBooked == true && room.Start >= today)
+                                .Select(room => new
+                                {
+                                    room.RoomId,
+                                    room.HospitalName,
+                                    room.RoomName,
+                                    room.IsBooked,
+                                    Start = room.Start.ToString("yyyy-MM-ddTHH:mm:ssZ"), // Formatação ISO 8601
+                                    End = room.End.ToString("yyyy-MM-ddTHH:mm:ssZ"),     // Formatação ISO 8601
+                                    room.UserId
+                                }).ToList();
+
+            return Ok(rooms);
+        }
+
 
        // PATCH: api/room/book/{roomId}
         [HttpPatch("book/{roomId}")]

@@ -43,38 +43,34 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AppointmentId"));
 
-                    b.Property<int?>("DoctorId")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("End")
+                    b.Property<DateTime>("EndDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("PatientUserId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RoomRentalId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Start")
+                    b.Property<DateTime>("StartDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("AppointmentId");
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("PatientUserId");
+                    b.HasIndex("PatientId");
 
-                    b.HasIndex("RoomRentalId");
+                    b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Appointment");
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Doctor", b =>
@@ -339,29 +335,29 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Appointment", b =>
                 {
-                    b.HasOne("WebAPI.Models.Doctor", null)
+                    b.HasOne("WebAPI.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
-                        .HasForeignKey("DoctorId");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("WebAPI.Models.Patient", null)
+                    b.HasOne("WebAPI.Models.Patient", "Patient")
                         .WithMany("Appointments")
-                        .HasForeignKey("PatientUserId");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("WebAPI.Models.RoomRental", "RoomRental")
+                    b.HasOne("WebAPI.Models.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoomRentalId")
+                        .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Doctor");
 
-                    b.Navigation("RoomRental");
+                    b.Navigation("Patient");
 
-                    b.Navigation("User");
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("WebAPI.Models.RentedRoom", b =>

@@ -9,29 +9,24 @@ namespace WebAPI.Models
     {
         [Key]
         public int AppointmentId { get; set; }
-        
-        [Required]
-        public DateTime StartDateTime { get; set; } // Data e hora de início da consulta
-        
-        [Required]
-        public DateTime EndDateTime { get; set; } // Data e hora de término da consulta
-        
-        [Required]
-        public string Status { get; set; } = "Pendente"; // Status da consulta: Confirmado, Pendente, Cancelado
-        
-        [Required]
-        public int DoctorId { get; set; }
-        [ForeignKey("DoctorId")]
-        public Doctor? Doctor { get; set; }
 
         [Required]
-        public int PatientId { get; set; }
-        [ForeignKey("PatientId")]
-        public Patient? Patient { get; set; }
+        public DateTime Start { get; set; } // Data e hora de início do compromisso
 
         [Required]
-        public int RoomId { get; set; }
-        [ForeignKey("RoomId")]
-        public Room? Room { get; set; }
+        public DateTime End { get; set; } // Data e hora de término do compromisso
+
+        [Required]
+        public bool IsConfirmed { get; set; } // Se o compromisso está confirmado
+
+        [Required]
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
+
+        [Required]
+        public int RoomRentalId { get; set; }
+        [ForeignKey("RoomRentalId")]
+        public RoomRental? RoomRental { get; set; }
     }
 }

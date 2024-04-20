@@ -47,6 +47,29 @@ public class RoomRentalController : ControllerBase
     }
 
     // Método para buscar um aluguel específico por ID
+
+    // PATCH: api/RoomRental/confirm/5
+    [HttpPatch("confirm/{id}")]
+    public IActionResult ConfirmRental(int id)
+    {
+        var rental = _context.RoomRentals.Find(id);
+        if (rental == null)
+        {
+            return NotFound($"Rental with ID {id} not found.");
+        }
+
+        if (rental.IsConfirmed)
+        {
+            return BadRequest("Rental is already confirmed.");
+        }
+
+        rental.IsConfirmed = true;
+        _context.RoomRentals.Update(rental);
+        _context.SaveChanges();
+
+        return Ok($"Rental with ID {id} has been confirmed.");
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetRental(int id)
     {
@@ -57,4 +80,17 @@ public class RoomRentalController : ControllerBase
         }
         return Ok(rental);
     }
+
+    [HttpGet]
+    public IActionResult GetAllRentals()
+    {
+        var rentals = _context.RoomRentals.ToList();
+        if (rentals == null || rentals.Count == 0)
+        {
+            return NotFound("No rentals found.");
+        }
+        return Ok(rentals);
+        
+    }
+
 }

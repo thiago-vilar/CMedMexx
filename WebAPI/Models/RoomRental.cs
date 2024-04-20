@@ -13,10 +13,10 @@ namespace WebAPI.Models
 
         [Required]
         public int RoomId { get; set; } // Referência à sala que está sendo alugada
-
+        
         [Required]
         public int UserId { get; set; } // Identificador do usuário que aluga a sala
-
+       
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public bool IsConfirmed { get; set; }

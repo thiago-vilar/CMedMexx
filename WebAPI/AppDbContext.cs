@@ -11,7 +11,7 @@ namespace WebAPI
         public DbSet<HospitalStaff> HospitalStaff { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Appointment> Appointment { get; set; }
         public DbSet<Admin> Admin { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomRental> RoomRentals { get; set; }
@@ -21,19 +21,6 @@ namespace WebAPI
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Appointment>()
-                .HasOne(a => a.Doctor)
-                .WithMany(d => d.Appointments)
-                .HasForeignKey(a => a.DoctorId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Appointment>()
-                .HasOne(a => a.Patient)
-                .WithMany(p => p.Appointments)
-                .HasForeignKey(a => a.PatientId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<RentedRoom>()
                 .ToTable("RentedRooms")
