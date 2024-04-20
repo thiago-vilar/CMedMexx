@@ -19,3 +19,13 @@
 .doctor-view .card:hover {
     transform: scale(1.05);
 }
+
+ .primary{
+    background-color: #ffffff;
+    opacity: 1;
+}
+
+ .secondary{
+    background-color: #93df7a;
+    opacity: 0.8;
+}

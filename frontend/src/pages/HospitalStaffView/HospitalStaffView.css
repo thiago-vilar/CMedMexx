@@ -34,4 +34,13 @@
 .event-card p {
     margin: 5px 0;
     font-size: 14px;
+    
 }
+
+.fc-event-title {
+    color: red;
+    white-space: nowrap; /* Impede que o texto seja quebrado em várias linhas */
+    overflow: hidden; /* Esconde qualquer texto que extrapole o espaço disponível */
+    text-overflow: ellipsis; /* Adiciona reticências ao texto que não couber */
+}
+

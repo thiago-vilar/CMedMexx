@@ -117,10 +117,10 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RentedRoomId"));
 
-                    b.Property<int?>("RoomId1")
+                    b.Property<int>("RoomId1")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UserId1")
+                    b.Property<int>("UserId1")
                         .HasColumnType("integer");
 
                     b.HasKey("UserId", "RoomId");
@@ -370,7 +370,9 @@ namespace WebAPI.Migrations
 
                     b.HasOne("WebAPI.Models.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoomId1");
+                        .HasForeignKey("RoomId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebAPI.Models.User", null)
                         .WithMany()
@@ -380,7 +382,9 @@ namespace WebAPI.Migrations
 
                     b.HasOne("WebAPI.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Room");
 
@@ -389,13 +393,13 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Room", b =>
                 {
-                    b.HasOne("WebAPI.Models.User", "Users")
+                    b.HasOne("WebAPI.Models.Room", "Rooms")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Users");
+                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("WebAPI.Models.RoomAvailability", b =>

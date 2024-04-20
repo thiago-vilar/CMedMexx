@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
             // Cria uma data 'today' em UTC
             var today = DateTime.UtcNow.Date;
 
-            var rooms = _context.Rooms.Where(room => !room.IsBooked && room.Start >= today)
+            var rooms = _context.Rooms.Where(room => room.Start >= today)
                                     .Select(room => new
                                     {
                                         room.RoomId,

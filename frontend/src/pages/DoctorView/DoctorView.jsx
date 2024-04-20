@@ -59,7 +59,7 @@ const DoctorView = () => {
             <Row className="mt-3">
                 {rooms.map(room => (
                     <Col md={4} key={room.roomId}>
-                        <Card>
+                        <Card style = {{backgroundColor: room.isBooked? "blue":"white" }}>
                             <Card.Body>
                                 <Card.Title>{room.roomName}</Card.Title>
                                 <Card.Text>
@@ -67,7 +67,7 @@ const DoctorView = () => {
                                     <br />
                                     Status: {room.isBooked ? "Booked" : "Available"}
                                 </Card.Text>
-                                <Button variant="primary" onClick={() => bookRoom(room.roomId)} disabled={room.isBooked}>
+                                <Button onClick={() => bookRoom(room.roomId)} disabled={room.isBooked}>
                                     Book Room
                                 </Button>
                             </Card.Body>

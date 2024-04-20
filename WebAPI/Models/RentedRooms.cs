@@ -23,7 +23,7 @@ namespace WebAPI.Models
         public int RoomId { get; set; }
 
         // Propriedades de navegação
-        public User User { get; set; }
-        public Room Room { get; set; }
+        public User? User { get; set; }
+        public Room? Room { get; set; }
     }
 }

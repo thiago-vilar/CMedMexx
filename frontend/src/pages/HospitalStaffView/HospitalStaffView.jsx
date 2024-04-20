@@ -13,11 +13,11 @@ const HospitalStaffView = () => {
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [roomDetails, setRoomDetails] = useState({
-        hospitalName: '',
-        roomName: '',
+        HospitalName: '',
+        RoomName: '',
         timeSlot: '08:00-12:00',
-        start: '',
-        end: '',
+        Start: '',
+        End: '',
         UserId: ''
     });
     const [dropdownTitle, setDropdownTitle] = useState("Escolha o Horário");
@@ -44,7 +44,7 @@ const HospitalStaffView = () => {
     }, [currentUser]);
     
   
-    useEffect(() => {
+    
         const fetchEvents = async () => {
             try {
                 
@@ -54,28 +54,26 @@ const HospitalStaffView = () => {
                 
                 
                 const response = await axios.get('http://localhost:5000/api/room/hospitalstaff/' + responseuser.data.userId) ;
+                console.log(response.data)
+                
                 setEvents(response.data.map(event => ({
                     title: `${event.hospitalName} - Sala ${event.roomName}`,
-                    start: event.start,
-                    end: event.end,
-                    backgroundColor: event.IsBooked ? '#546E7A' : '#90E3EE',
-                    timeSlot: event.timeSlot,
-                    hospitalName: event.hospitalName,
+                    date: event.start,
                 })));
             } catch (error) {
                 console.error('Failed to fetch events:', error);
                 setError('Failed to load events.');
             }
         };
-
-        fetchEvents();
-    }, []);
+        useEffect(() => {
+            fetchEvents();
+        }, []);
 
     const handleDateClick = (selectInfo) => {
         setRoomDetails(prev => ({
             ...prev,
-            start: selectInfo.dateStr + "T08:00:00Z",
-            end: selectInfo.dateStr + "T12:00:00Z"
+            Start: selectInfo.dateStr + "T08:00:00Z",
+            End: selectInfo.dateStr + "T12:00:00Z"
         }));
         setShowModal(true);
     };
@@ -98,11 +96,8 @@ const HospitalStaffView = () => {
             ;
 
             await axios.post('http://localhost:5000/api/room/add', roomDetails);
-            setEvents(prevEvents => [...prevEvents, {
-                ...roomDetails,
-                title: `${roomDetails.hospitalName} - Sala ${roomDetails.roomName}`,
-                backgroundColor: '#90E3EE'
-            }]);
+            fetchEvents ();
+
             setSuccess('Disponibilidade da sala adicionada com sucesso.');
         } catch (error) {
             console.error('Error adding room:', error);
@@ -137,13 +132,13 @@ const HospitalStaffView = () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Nome do Hospital</Form.Label>
-                            <Form.Control type="text" value={roomDetails.hospitalName}
-                                onChange={(e) => setRoomDetails({ ...roomDetails, hospitalName: e.target.value })} />
+                            <Form.Control type="text" value={roomDetails.HospitalName}
+                                onChange={(e) => setRoomDetails({ ...roomDetails, HospitalName: e.target.value })} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Nome da Sala</Form.Label>
-                            <Form.Control type="text" value={roomDetails.roomName}
-                                onChange={(e) => setRoomDetails({ ...roomDetails, roomName: e.target.value })} />
+                            <Form.Control type="text" value={roomDetails.RoomName}
+                                onChange={(e) => setRoomDetails({ ...roomDetails, RoomName: e.target.value })} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Horário</Form.Label>

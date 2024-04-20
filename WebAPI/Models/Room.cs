@@ -18,7 +18,7 @@ namespace WebAPI.Models
         public DateTime End { get; set; }
 
         [ForeignKey("UserId")]
-        public Room? Rooms { get; set; }
+        public User? Users { get; set; }
 
         public List<RoomAvailability> Availabilities { get; set; } = new List<RoomAvailability>();
         public List<RoomRental> Rentals { get; set; } = new List<RoomRental>();  // Adicionando a propriedade Rentals
