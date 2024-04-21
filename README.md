@@ -50,4 +50,4 @@ Este projeto é licenciado sob a Licença XYZ. Veja o arquivo `LICENSE` para mai
 
 ## Contato
 - **Email**: [oceanocabral@gmail.com](mailto:oceanocabral@gmail.com)
-- **GitHub**: [thiago-vilar](https://github.com/thiago-vilar/CMedMexx)
+- **GitHub**: [thiago-vilar](https://github.com/thiago-vilar)
