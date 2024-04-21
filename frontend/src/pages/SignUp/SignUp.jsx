@@ -45,7 +45,7 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
-      alert('Usuário já cadastrado!.');
+      alert('Credenciais inválidas.');
     }
   };
 

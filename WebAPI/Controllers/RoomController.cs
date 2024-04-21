@@ -163,6 +163,12 @@ namespace WebAPI.Controllers
                 return BadRequest("Invalid room data.");
             }
 
+            // Verifica se a data de início é no passado
+            if (room.Start.Date < DateTime.UtcNow.Date)
+            {
+                return BadRequest("Cannot add a room in the past.");
+            }
+
             try
             {
                 _context.Rooms.Add(room);

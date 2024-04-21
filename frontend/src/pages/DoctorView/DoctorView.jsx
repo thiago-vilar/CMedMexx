@@ -3,6 +3,7 @@ import axios from 'axios';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import TextField from '@material-ui/core/TextField';
 import { Card, Button, Alert, Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './DoctorView.css';
@@ -54,6 +55,7 @@ const DoctorView = () => {
 
     useEffect(() => {fetchingData()}, []);
     useEffect(() => {
+            
             axios.get('http://localhost:5000/api/Appointment')
                     .then(async response => { 
                         console.log ({response: response.data});
@@ -62,7 +64,7 @@ const DoctorView = () => {
 
                         await response.data.map(async d => {
                             console.log ({availableAppointments})
-                            const response = availableAppointments.filter(room => room.roomRentalId == d.roomRentalId)[0]
+                            const response = availableAppointments.filter(room => room.roomRentalId === d.roomRentalId)[0]
                          
                             const item = {
                                 ...d,
@@ -93,8 +95,8 @@ const DoctorView = () => {
 
     const bookRoom = (roomId) => {
         axios.patch(`http://localhost:5000/api/room/book/${roomId}`,{
-            StartDateTime: new Date(),
-            EndDateTime: new Date(),
+            startDateTime: new Date(),
+            endDateTime: new Date(),
             DoctorId:localStorage.getItem('userId')
         })
             .then(response => {
@@ -102,7 +104,7 @@ const DoctorView = () => {
             })
             .catch(error => {
                 console.error('Error booking room:', error);
-                setError('Failed to book room.');
+                setError('Falha em alugar a sala. Já reservada!.');
             });
     };
     const handleEventClick = (room) => {
@@ -111,22 +113,29 @@ const DoctorView = () => {
             fetchRooms(); // Refresh the room list after booking
             fetchingData();
         })
-    }
+    };
+    
     return (
         <Container className="doctor-view">
-            <h2>Available Rooms</h2>
+            <br />
+            <h2>ALUGUEL DE SALAS</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
+                locale="pt"
                 events={rooms.map(room => ({
-                    title: room.RoomName,
-                    start: room.Start,
-                    end: room.End,
-                    color: room.IsBooked ? '#007bff' : '#28a745' // Blue for booked, green for available
+                    title: `${room.roomName} - ${room.hospitalName} (${room.start} to ${room.end})`,
+                    start: room.start,
+                    end: room.end,
+                    color: room.isBooked ? 'blue' : 'lightgrey',
+                    id: room.roomId // This is needed to identify the room in the eventClick handler
                 }))}
+                eventClick={(info) => bookRoom(info.event.id)}
             />
-            <h1>ROOMS</h1>
+            <br />
+            <h1>SALAS DISPONÍVES PARA ALUGUEL</h1>
+            <p>Ao alugar uma sala, torne-se disponível para consulta automaticamente! </p>
             <Row className="mt-3">
                 {rooms.map(room => (
                     <Col md={4} key={room.roomId}>
@@ -134,19 +143,23 @@ const DoctorView = () => {
                             <Card.Body>
                                 <Card.Title>{room.roomName}</Card.Title>
                                 <Card.Text>
-                                    Hospital: {room.hospitalName}
+                                <TextField label={<b>Hospital</b>} variant="outlined" value={room.hospitalName}/>
                                     <br />
-                                    Status: {room.isBooked ? "Booked" : "Available"}
+                                    start: {room.start}
+                                    <br />
+                                    end: {room.end}
+                                    <br />
+                                    Status: {room.isBooked ? "Alugada" : "Disponível"}
                                 </Card.Text>
                                 <Button onClick={() => bookRoom(room.roomId)} disabled={room.isBooked}>
-                                    Book Room
+                                    ALUGAR
                                 </Button>
                             </Card.Body>
                         </Card>
                     </Col>
                 ))}
             </Row>
-            <h1>Appointments</h1>
+            <h1>AGENDA DE CONSULTAS</h1>
             <Row className="mt-3">
                 {appointments.map(room => (
                     <Col md={4} key={room.data?.roomId}>
@@ -154,12 +167,17 @@ const DoctorView = () => {
                             <Card.Body>
                                 <Card.Title>{room.data?.roomName}</Card.Title>
                                 <Card.Text>
-                                    Hospital: {room.data?.hospitalName}
+                                    <TextField label={<b>Hospital</b>} variant="outlined" value={room.hospitalName}/>
+
                                     <br />
-                                    Status: {room.isConfirmed ? "Booked" : "Available"}
+                                    start: {room.start}
+                                    <br />
+                                    end: {room.end}
+                                    <br />
+                                    Status: {room.isConfirmed ? "Consulta Confirmada" : "Consulta Pendente"}
                                 </Card.Text>
                                 <Button onClick={() => handleEventClick(room)} disabled={room.isConfirmed}>
-                                    Book Room
+                                    CONFIRMAR
                                 </Button>
                             </Card.Body>
                         </Card>

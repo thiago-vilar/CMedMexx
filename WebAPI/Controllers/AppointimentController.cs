@@ -44,6 +44,7 @@ namespace WebAPI.Controllers
             return Ok(appointment);
         }
 
+        
         // POST: api/Appointment
         [HttpPost]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment appointment)
@@ -133,7 +134,7 @@ namespace WebAPI.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException )
             {
                 // Log exception here using your preferred logging framework
                 return StatusCode(500, "An error occurred while updating the appointment. Please try again later.");

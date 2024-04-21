@@ -3,7 +3,7 @@ import axios from 'axios';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Modal, Button, Form, Alert, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Modal, Button, Form, Alert, Dropdown, DropdownButton, ListGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HospitalStaffView.css';
 import { useAuth } from '../../contexts/AuthContext';
@@ -124,6 +124,13 @@ const HospitalStaffView = () => {
                     <div><strong>{eventInfo.event._def.title}</strong></div>
                 )}
             />
+            <ListGroup className="mt-3">
+                {events.map((event, index) => (
+                    <ListGroup.Item key={index}>
+                        {event.title} - {event.date}
+                    </ListGroup.Item>
+                ))}
+            </ListGroup>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Disponibilizar Sala</Modal.Title>
