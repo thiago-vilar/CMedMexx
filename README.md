@@ -71,7 +71,7 @@ Imagens do Funcionário do Hospital: disponibilizam salas para alocação, usu d
 http://localhost:3000/DoctorView
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/584cdf22-dd0e-42de-86c0-a7962df8ebe1)
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/f74ad3fe-156e-443f-85c3-c388e99197e2)
-Imagens do Médido: visão do médico sobre o calendário com todas as salas disponíveis no sistema para alocação. No painel de Cards, abaixo do calendário, a seção SALAS DISPONÍVES PARA ALUGUEL apresentam Cards em branco que são salas disponíveis, em azul estão alugadas por este médico. Na seção AGENDA DE CONSULTAS Cards amarelos representam as consultas agendadas(requisitadas pelo paciente) e Cards verdes são consultas confirmadas pelos médicos.
+Imagens do Médico: visão do médico sobre o calendário com todas as salas disponíveis no sistema para alocação. No painel de Cards, abaixo do calendário, a seção SALAS DISPONÍVES PARA ALUGUEL apresentam Cards em branco que são salas disponíveis, em azul estão alugadas por este médico. Na seção AGENDA DE CONSULTAS Cards amarelos representam as consultas agendadas(requisitadas pelo paciente) e Cards verdes são consultas confirmadas pelos médicos.
 
 http://localhost:3000/PatientView
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/5c0fef29-13fa-4cb2-93b2-e9a18e952bfd)
