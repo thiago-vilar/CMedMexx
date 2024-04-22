@@ -55,8 +55,9 @@ const DoctorView = () => {
 
     useEffect(() => {fetchingData()}, []);
     useEffect(() => {
-            
-            axios.get('http://localhost:5000/api/Appointment')
+        const userId = localStorage.getItem('userId');
+
+            axios.get('http://localhost:5000/api/Appointment/doctor/'+userId)
                     .then(async response => { 
                         console.log ({response: response.data});
                         setAppointments([]);
@@ -167,7 +168,7 @@ const DoctorView = () => {
                             <Card.Body>
                                 <Card.Title>{room.data?.roomName}</Card.Title>
                                 <Card.Text>
-                                    <TextField label={<b>Hospital</b>} variant="outlined" value={room.hospitalName}/>
+                                    <TextField label={<b>Paciente</b>} variant="outlined" value={room.user.username}/>
 
                                     <br />
                                     start: {room.start}

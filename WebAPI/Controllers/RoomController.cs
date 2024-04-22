@@ -86,15 +86,15 @@ namespace WebAPI.Controllers
             return Ok(rooms);
         }
 
-        // GET: api/room/booked
-        [HttpGet("booked")]
-        public IActionResult GetBookedRooms()
+        // GET: api/room/booked/
+        [HttpGet("booked/{userId}")]
+        public IActionResult GetBookedRooms(int userId)
         {
             // Cria uma data 'today' em UTC
             var today = DateTime.UtcNow.Date;
 
             var rooms = _context.Rooms
-                                .Where(room => room.IsBooked == true && room.Start >= today)
+                                .Where(room => room.IsBooked == true && room.Start >= today && room.UserId == userId)
                                 .Select(room => new
                                 {
                                     room.RoomId,
@@ -108,6 +108,7 @@ namespace WebAPI.Controllers
 
             return Ok(rooms);
         }
+        
 
 
        // PATCH: api/room/book/{roomId}

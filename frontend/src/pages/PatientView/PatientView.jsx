@@ -23,7 +23,9 @@ const PatientView = () => {
     const fetchData = async () => {
         try {
             const roomResponse = await axios.get('http://localhost:5000/api/RoomRental');
-            const roomData = await Promise.all(roomResponse.data.map(async d => {
+            const roomData = await Promise.all(roomResponse.data
+                .filter(d => !d.isConfirmed)
+                .map(async d => {
                 const userResponse = await axios.get(`http://localhost:5000/api/user/${d.userId}`);
                 const roomDetailsResponse = await axios.get(`http://localhost:5000/api/room/${d.roomId}`);
                 return {
@@ -44,13 +46,17 @@ const PatientView = () => {
     const fetchAppointments = async () => {
         try {
             const appointmentsResponse = await axios.get('http://localhost:5000/api/Appointment');
-            const newAppointments = appointmentsResponse.data.map(appointment => {
-                const matchingRoom = availableAppointments.find(room => room.roomRentalId === appointment.roomRentalId);
+            const newAppointments = await Promise.all (appointmentsResponse.data
+                .filter(appointment => appointment.userId == localStorage.getItem('userId'))
+                .map(async appointment => {
+                    const userresponse = await axios.get(`http://localhost:5000/api/user/${appointment.roomRental.userId}`);
+                // const matchingRoom = availableAppointments.find(room => room.roomRentalId === appointment.roomRentalId);
+                // console.log({appointment, matchingRoom});
                 return {
                     ...appointment,
-                    data: matchingRoom,
+                    data: {title:  `${userresponse.data.username}`},
                 };
-            });
+            }));
             setAppointments(newAppointments);
         } catch (error) {
             console.error('Error fetching appointments:', error);
@@ -70,7 +76,7 @@ const PatientView = () => {
     const handleEventClick = (appointment) => {
         if (window.confirm(`Você gostaria de agendar sua consulta em: ${appointment.title}?`)) {
             axios.post('http://localhost:5000/api/Appointment', {
-                userId: appointment.userId,
+                userId: localStorage.getItem("userId"),
                 roomRentalId: appointment.roomRentalId,
                 start: appointment.start,
                 end: appointment.end,

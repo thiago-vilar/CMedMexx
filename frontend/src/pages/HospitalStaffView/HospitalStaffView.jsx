@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './HospitalStaffView.css';
 import { useAuth } from '../../contexts/AuthContext';
 
+
 const HospitalStaffView = () => {
     const { currentUser } = useAuth();
     const [events, setEvents] = useState([]);
@@ -24,6 +25,12 @@ const HospitalStaffView = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
+   
+   
+    const [bookedRooms, setBookedRooms] = useState([]);
+    const userId = localStorage.getItem('userId'); // Supondo que o ID do usuário esteja armazenado em localStorage
+    
+    
 
     useEffect(() => {
         if (currentUser && currentUser.userId) {
@@ -108,6 +115,24 @@ const HospitalStaffView = () => {
         }
     };
 
+    
+        
+       
+    
+        const fetchBookedRooms = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/room/booked/${userId}`);
+                setBookedRooms(response.data);
+            } catch (error) {
+                console.error('Error fetching booked rooms:', error);
+            }
+        };
+
+        useEffect(() => {
+            fetchBookedRooms();
+        }, []);
+
+
     return (
         <div className="hospital-staff-view">
             {error && <Alert variant="danger">{error}</Alert>}
@@ -129,8 +154,17 @@ const HospitalStaffView = () => {
                     <ListGroup.Item key={index}>
                         {event.title} - {event.date}
                     </ListGroup.Item>
-                ))}
+                ))} 
             </ListGroup>
+
+            <ListGroup>
+                {bookedRooms.map((room, index) => (
+                    <ListGroup.Item key={index}>
+                        {room.hospitalName} - {room.roomName}
+                    </ListGroup.Item>
+                ))} 
+            </ListGroup>
+            
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Disponibilizar Sala</Modal.Title>

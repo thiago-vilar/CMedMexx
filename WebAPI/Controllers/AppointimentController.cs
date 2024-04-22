@@ -29,6 +29,25 @@ namespace WebAPI.Controllers
             return Ok(appointment);
         }
 
+        // GET: api/Appointment/doctor/{userId}
+        [HttpGet("doctor/{userId}")]
+        public async Task<IActionResult> GetAppointmentsByUserId(int userId)
+        {
+            var appointments = await _context.Appointment
+                                            .Include(a => a.User)
+                                            .Include(a => a.RoomRental)
+                                            .Where(a => a.RoomRental!.UserId == userId)
+
+                                            .ToListAsync();
+            if (!appointments.Any())
+            {
+                return Ok(new List<Appointment>());
+            }
+
+            return Ok(appointments);
+        }
+
+
         // GET: api/Appointment/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointment(int id)
