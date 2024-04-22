@@ -159,11 +159,12 @@ const HospitalStaffView = () => {
 
             <ListGroup>
                 {bookedRooms.map((room, index) => (
-                    <ListGroup.Item key={index}>
-                        {room.hospitalName} - {room.roomName}
+                    <ListGroup.Item key={index} style={{ backgroundColor: 'blue', color: 'white' }}>
+                    {room.hospitalName} - {room.roomName}
                     </ListGroup.Item>
                 ))} 
             </ListGroup>
+
             
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
