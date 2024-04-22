@@ -63,12 +63,17 @@ O CMedMexx é um sistema de gerenciamento de consultas médicas que permite a pa
 Cada perfil de usuário logado no sistema segue uma rota diferente, os usuário podem ser do tipo Funcionário do Hospital/Clínica('hospitalstaff), Médicos('doctor'), Pacientes('patient').
 Aqui está uma visão da nossa interface de agendamento e gestão interativa:
 
+http://localhost:3000/HospitalStaffView
+![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/99e03258-129c-41b1-a270-216d8d129e46)
+![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/8bb93d42-c01e-414a-b053-75a3b046dea8)
+Imagens do Funcionário do Hospital: disponibilizam salas para alocação, usu dos médicos. Os registros ficam evidenciados no calendário e tmbém aparecem numa lista completa de todas as salas que foram disponibilizadas. Cada Funcionário ('hospitalstaff') só poderá visualizar a própria disponibilidade de salas.
+
+http://localhost:3000/DoctorView
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/584cdf22-dd0e-42de-86c0-a7962df8ebe1)
-Imagem 1: visão do médico sobre o calendário das salas disponíveis para alocação.
-
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/f74ad3fe-156e-443f-85c3-c388e99197e2)
-Imagem 2: painel de Cards, abaixo do calendário com a seção de SALAS DISPONÍVES PARA ALUGUEL onde em branco estão disponíveis, em azul estão alugadas por este médico. Na seção AGENDA DE CONSULTAS Cards amarelos representam as consultas agendadas pelos paciente e Cards verdes são consultas confirmadas pelos médicos.
+Imagens do Médido: visão do médico sobre o calendário com todas as salas disponíveis no sistema para alocação. No painel de Cards, abaixo do calendário, a seção SALAS DISPONÍVES PARA ALUGUEL apresentam Cards em branco que são salas disponíveis, em azul estão alugadas por este médico. Na seção AGENDA DE CONSULTAS Cards amarelos representam as consultas agendadas(requisitadas pelo paciente) e Cards verdes são consultas confirmadas pelos médicos.
 
+http://localhost:3000/PatientView
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/5c0fef29-13fa-4cb2-93b2-e9a18e952bfd)
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/7b5a8f38-d734-4630-b39f-f50298a1c7bd)
 ![image](https://github.com/thiago-vilar/CMedMexx/assets/104908140/9459cf45-4c32-45d5-9c58-1ee81c2e5706)
